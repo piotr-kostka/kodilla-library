@@ -1,15 +1,17 @@
 package com.crud.kodilla_library.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "titles")
 public class Title {
 
@@ -35,5 +37,5 @@ public class Title {
             cascade = CascadeType.PERSIST,
             fetch = FetchType.LAZY
     )
-    private List<Exemplar> exemplars;
+    private Set<Exemplar> exemplars;
 }

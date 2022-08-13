@@ -1,16 +1,12 @@
 package com.crud.kodilla_library.controller;
 
 import com.crud.kodilla_library.controller.exceptions.RentalNotFoundException;
-import com.crud.kodilla_library.domain.Rental;
 import com.crud.kodilla_library.domain.dto.RentalDto;
-import com.crud.kodilla_library.mapper.RentalMapper;
-import com.crud.kodilla_library.service.DbService;
+import com.crud.kodilla_library.service.RentalDbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -18,45 +14,35 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RentalController {
 
-    private final DbService service;
-    private final RentalMapper rentalMapper;
+    private final RentalDbService rentalDbService;
 
     @GetMapping
-    public ResponseEntity<List<RentalDto>> getRentals() {
-        List<Rental> rentals = service.getAllRentals();
-        return ResponseEntity.ok(rentalMapper.mapToRentalDtoList(rentals));
+    public List<RentalDto> getRentals() {
+        return rentalDbService.getAllRentals();
     }
 
     @GetMapping(value = "{rentalId}")
-    public ResponseEntity<RentalDto> getRental(@PathVariable long rentalId) throws RentalNotFoundException {
-        return ResponseEntity.ok(rentalMapper.mapToRentalDto(service.getRental(rentalId)));
+    public RentalDto getRental(@PathVariable long rentalId) throws RentalNotFoundException {
+        return rentalDbService.getRental(rentalId);
     }
 
     @GetMapping(value = "/getUserRentals/{userId}")
-    public ResponseEntity<List<RentalDto>> getUserRentals(@PathVariable long userId) {
-        List<Rental> userRentals = service.getUserRentals(userId);
-        return ResponseEntity.ok(rentalMapper.mapToRentalDtoList(userRentals));
+    public List<RentalDto> getUserRentals(@PathVariable long userId) {
+        return rentalDbService.getUserRentals(userId);
     }
 
     @DeleteMapping(value = "{rentalId}")
-    public ResponseEntity<Void> deleteRental(@PathVariable long rentalId) {
-        service.deleteRental(rentalId);
-        return ResponseEntity.ok().build();
+    public void deleteRental(@PathVariable long rentalId) {
+        rentalDbService.returnExemplar(rentalId);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RentalDto> updateRental(@RequestBody RentalDto rentalDto) {
-        Rental rental = rentalMapper.mapToRental(rentalDto);
-        Rental savedRental = service.saveRental(rental);
-        return ResponseEntity.ok(rentalMapper.mapToRentalDto(savedRental));
+    public RentalDto updateRental(@RequestBody RentalDto rentalDto) {
+        return rentalDbService.createRental(rentalDto);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RentalDto> createRental(@RequestBody RentalDto rentalDto) {
-        Rental rental = rentalMapper.mapToRental(rentalDto);
-        rental.setRentDate(LocalDate.now());
-        rental.setReturnDate(LocalDate.now().plusDays(30));
-        Rental createdRental = service.saveRental(rental);
-        return ResponseEntity.ok(rentalMapper.mapToRentalDto(createdRental));
+    public RentalDto createRental(@RequestBody RentalDto rentalDto) {
+        return rentalDbService.createRental(rentalDto);
     }
 }

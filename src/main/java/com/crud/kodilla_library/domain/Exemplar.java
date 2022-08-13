@@ -1,16 +1,17 @@
 package com.crud.kodilla_library.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "exemplars")
 public class Exemplar {
 
@@ -20,8 +21,8 @@ public class Exemplar {
     private long exemplarId;
 
     @ManyToOne
-    @JoinColumn(name = "TITLE")
-    private Title titleId;
+    @JoinColumn(name = "title")
+    private Title title;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -35,5 +36,5 @@ public class Exemplar {
             cascade = CascadeType.PERSIST,
             fetch = FetchType.LAZY
     )
-    private List<Rental> rentals = new ArrayList<>();
+    private Set<Rental> rentals;
 }

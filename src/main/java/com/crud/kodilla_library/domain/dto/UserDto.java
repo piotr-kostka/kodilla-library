@@ -2,16 +2,18 @@ package com.crud.kodilla_library.domain.dto;
 
 import com.crud.kodilla_library.domain.Rental;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
 
     private long userId;
@@ -20,5 +22,5 @@ public class UserDto {
     private LocalDate signupDate;
 
     @JsonIgnore
-    private List<Rental> rentals;
+    private Set<Rental> rentals;
 }

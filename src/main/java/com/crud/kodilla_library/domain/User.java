@@ -1,16 +1,18 @@
 package com.crud.kodilla_library.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Entity(name = "users")
 public class User {
 
@@ -36,5 +38,5 @@ public class User {
             cascade = CascadeType.PERSIST,
             fetch = FetchType.LAZY
     )
-    private List<Rental> rentals;
+    private Set<Rental> rentals;
 }
