@@ -22,7 +22,7 @@ public class ExemplarMapper {
     public ExemplarDto mapToExemplarDto(final Exemplar exemplar) {
         return new ExemplarDto(
                 exemplar.getExemplarId(),
-                exemplar.getTitleId(),
+                exemplar.getTitle(),
                 exemplar.getStatus(),
                 exemplar.getRentals()
         );

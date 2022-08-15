@@ -33,7 +33,7 @@ public class Title {
     @JsonIgnore
     @OneToMany(
             targetEntity = Exemplar.class,
-            mappedBy = "titleId",
+            mappedBy = "title",
             cascade = CascadeType.PERSIST,
             fetch = FetchType.LAZY
     )
