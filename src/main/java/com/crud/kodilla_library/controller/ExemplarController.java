@@ -1,6 +1,5 @@
 package com.crud.kodilla_library.controller;
 
-import com.crud.kodilla_library.controller.exceptions.ExemplarNotFoundException;
 import com.crud.kodilla_library.domain.dto.ExemplarDto;
 import com.crud.kodilla_library.service.ExemplarDbService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class ExemplarController {
     }
 
     @GetMapping(value = "{exemplarId}")
-    public ExemplarDto getExemplar(@PathVariable long exemplarId) throws ExemplarNotFoundException {
+    public ExemplarDto getExemplar(@PathVariable long exemplarId) {
         return exemplarDbService.getExemplar(exemplarId);
     }
 

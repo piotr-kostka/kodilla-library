@@ -1,6 +1,5 @@
 package com.crud.kodilla_library.controller;
 
-import com.crud.kodilla_library.controller.exceptions.RentalNotFoundException;
 import com.crud.kodilla_library.domain.dto.RentalDto;
 import com.crud.kodilla_library.service.RentalDbService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class RentalController {
     }
 
     @GetMapping(value = "{rentalId}")
-    public RentalDto getRental(@PathVariable long rentalId) throws RentalNotFoundException {
+    public RentalDto getRental(@PathVariable long rentalId) {
         return rentalDbService.getRental(rentalId);
     }
 

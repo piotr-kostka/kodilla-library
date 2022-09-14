@@ -1,6 +1,5 @@
 package com.crud.kodilla_library.controller;
 
-import com.crud.kodilla_library.controller.exceptions.UserNotFoundException;
 import com.crud.kodilla_library.domain.dto.UserDto;
 import com.crud.kodilla_library.service.UserDbService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping(value = "{userId}")
-    public UserDto getUser(@PathVariable long userId) throws UserNotFoundException {
+    public UserDto getUser(@PathVariable long userId) {
         return userDbService.getUser(userId);
     }
 

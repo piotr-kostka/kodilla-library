@@ -1,6 +1,5 @@
 package com.crud.kodilla_library.controller;
 
-import com.crud.kodilla_library.controller.exceptions.TitleNotFoundException;
 import com.crud.kodilla_library.domain.dto.TitleDto;
 import com.crud.kodilla_library.service.TitleDbService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class TitleController {
     }
 
     @GetMapping(value = "{titleId}")
-    public TitleDto getTitle(@PathVariable long titleId) throws TitleNotFoundException {
+    public TitleDto getTitle(@PathVariable long titleId) {
         return titleDbService.getTitle(titleId);
     }
 
