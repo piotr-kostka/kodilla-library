@@ -5,6 +5,7 @@ import com.crud.kodilla_library.domain.User;
 import com.crud.kodilla_library.domain.dto.UserDto;
 import com.crud.kodilla_library.mapper.UserMapper;
 import com.crud.kodilla_library.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,27 +33,24 @@ class UserDbServiceTest {
     @Mock
     private UserRepository userRepositoryMock;
 
-    private final User user = new User(1L, "firstname", "lastname", LocalDate.of(2022,8,15),new HashSet<>());
+    private User user;
+    private UserDto userDto;
+    private List<User> userList = new ArrayList<>();
+    private List<UserDto> userDtoList = new ArrayList<>();
 
-    private final UserDto userDto = new UserDto(1L, "firstname", "lastname", LocalDate.of(2022,8,15),new HashSet<>());
-
-    private List<User> initUserList() {
-        List<User> userList = new ArrayList<>();
+    @BeforeEach
+    void init() {
+        user = new User(1L, "firstname", "lastname", LocalDate.of(2022,8,15),new HashSet<>());
+        userDto = new UserDto(1L, "firstname", "lastname", LocalDate.of(2022,8,15),new HashSet<>());
         userList.add(user);
-        return userList;
-    }
-
-    private List<UserDto> initUserDtoList() {
-        List<UserDto> userDtoList = new ArrayList<>();
         userDtoList.add(userDto);
-        return userDtoList;
     }
 
     @Test
-    void getAllUsers() {
+    void getAllUsersTest() {
         //Given
-        when(userMapperMock.mapToUserDtoList(initUserList())).thenReturn(initUserDtoList());
-        when(userRepositoryMock.findAll()).thenReturn(initUserList());
+        when(userMapperMock.mapToUserDtoList(userList)).thenReturn(userDtoList);
+        when(userRepositoryMock.findAll()).thenReturn(userList);
 
         //When
         List<UserDto> expectedList = userDbService.getAllUsers();
@@ -63,7 +61,7 @@ class UserDbServiceTest {
     }
 
     @Test
-    void getUser() throws UserNotFoundException {
+    void getUserTest() throws UserNotFoundException {
         //Given
         when(userMapperMock.mapToUserDto(user)).thenReturn(userDto);
         when(userRepositoryMock.findById(userDto.getUserId())).thenReturn(Optional.of(user));
@@ -77,13 +75,11 @@ class UserDbServiceTest {
     }
 
     @Test
-    void createUser() {
+    void createUserTest() {
         //Given
         when(userMapperMock.mapToUser(userDto)).thenReturn(user);
-
         User savedUser = userMapperMock.mapToUser(userDto);
         when(userRepositoryMock.save(user)).thenReturn(savedUser);
-
         when(userMapperMock.mapToUserDto(savedUser)).thenReturn(userDto);
 
         //When
@@ -94,7 +90,7 @@ class UserDbServiceTest {
     }
 
     @Test
-    void deleteUser() {
+    void deleteUserTest() {
         //Given
         //When
         userDbService.deleteUser(1L);

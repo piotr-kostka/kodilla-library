@@ -2,6 +2,7 @@ package com.crud.kodilla_library.mapper;
 
 import com.crud.kodilla_library.domain.*;
 import com.crud.kodilla_library.domain.dto.RentalDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,22 +21,25 @@ class RentalMapperTest {
     @InjectMocks
     private RentalMapper rentalMapper;
 
-    public User initUser() {
-        return new User(1L, "firstname", "lastname", LocalDate.of(2022,8,14),new HashSet<>());
-    }
+    private User user;
+    private Title title;
+    private Exemplar exemplar;
+    private Rental rental;
+    private RentalDto rentalDto;
+    private List<Rental> rentalList = new ArrayList<>();
 
-    public Title initTitle() {
-        return new Title(1L, "title", "author", 2022, new HashSet<>());
-    }
-
-    public Exemplar initExemplar() {
-        return new Exemplar(1L, initTitle(), ExemplarStatus.AVAILABLE, new HashSet<>());
+    @BeforeEach
+    void init() {
+        user = new User(1L, "firstname", "lastname", LocalDate.of(2022,8,14),new HashSet<>());
+        title = new Title(1L, "title", "author", 2022, new HashSet<>());
+        exemplar = new Exemplar(1L, title, ExemplarStatus.AVAILABLE, new HashSet<>());
+        rental = new Rental(1L, exemplar, user, LocalDate.of(2022,8,14), LocalDate.of(2022,8,14).plusDays(30));
+        rentalDto = new RentalDto(1L, exemplar, user, LocalDate.of(2022,8,14), LocalDate.of(2022,8,14).plusDays(30));
+        rentalList.add(rental);
     }
 
     @Test
     void mapToRentalTest() {
-        //Given
-        RentalDto rentalDto = new RentalDto(1L, initExemplar(), initUser(), LocalDate.of(2022,8,14), LocalDate.of(2022,8,14).plusDays(30));
         //When
         Rental expected = rentalMapper.mapToRental(rentalDto);
         //Then
@@ -48,8 +52,6 @@ class RentalMapperTest {
 
     @Test
     void mapToRentalDtoTest() {
-        //Given
-        Rental rental = new Rental(1L, initExemplar(), initUser(), LocalDate.of(2022,8,14), LocalDate.of(2022,8,14).plusDays(30));
         //When
         RentalDto expected = rentalMapper.mapToRentalDto(rental);
         //Then
@@ -62,12 +64,8 @@ class RentalMapperTest {
 
     @Test
     void mapToRentalDtoListTest() {
-        //Given
-        Rental rental = new Rental(1L, initExemplar(), initUser(), LocalDate.of(2022,8,14), LocalDate.of(2022,8,14).plusDays(30));
-        List<Rental> list = new ArrayList<>();
-        list.add(rental);
         //When
-        List<RentalDto> expected = rentalMapper.mapToRentalDtoList(list);
+        List<RentalDto> expected = rentalMapper.mapToRentalDtoList(rentalList);
         //Then
         assertEquals(1, expected.size());
     }

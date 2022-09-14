@@ -7,6 +7,7 @@ import com.crud.kodilla_library.domain.Title;
 import com.crud.kodilla_library.domain.dto.ExemplarDto;
 import com.crud.kodilla_library.mapper.ExemplarMapper;
 import com.crud.kodilla_library.repository.ExemplarRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,29 +34,30 @@ class ExemplarDbServiceTest {
     @Mock
     private ExemplarRepository exemplarRepositoryMock;
 
-    private final Title title = new Title(1L, "title", "author", 2022, new HashSet<>());
-    private final Exemplar exemplar = new Exemplar(1L, title, ExemplarStatus.AVAILABLE, new HashSet<>());
-    private final ExemplarDto exemplarDto = new ExemplarDto(1L, title, ExemplarStatus.AVAILABLE, new HashSet<>());
+    private Title title;
+    private Exemplar exemplar;
+    private ExemplarDto exemplarDto;
+    private List<Exemplar> exemplarList = new ArrayList<>();
+    private List<ExemplarDto> exemplarDtoList = new ArrayList<>();
 
-    private List<Exemplar> initExemplarList() {
-        List<Exemplar> exemplarList = new ArrayList<>();
+    @BeforeEach
+    void init() {
+        title = new Title(1L, "title", "author", 2022, new HashSet<>());
+        exemplar = new Exemplar(1L, title, ExemplarStatus.AVAILABLE, new HashSet<>());
+        exemplarDto = new ExemplarDto(1L, title, ExemplarStatus.AVAILABLE, new HashSet<>());
         exemplarList.add(exemplar);
-        return exemplarList;
-    }
-
-    private List<ExemplarDto> initExemplarDtoList() {
-        List<ExemplarDto> exemplarDtoList = new ArrayList<>();
         exemplarDtoList.add(exemplarDto);
-        return exemplarDtoList;
     }
 
     @Test
-    void getAllExemplars() {
+    void getAllExemplarsTest() {
         //Given
-        when(exemplarMapperMock.mapToExemplarDtoList(initExemplarList())).thenReturn(initExemplarDtoList());
-        when(exemplarRepositoryMock.findAll()).thenReturn(initExemplarList());
+        when(exemplarMapperMock.mapToExemplarDtoList(exemplarList)).thenReturn(exemplarDtoList);
+        when(exemplarRepositoryMock.findAll()).thenReturn(exemplarList);
+
         //When
         List<ExemplarDto> expectedList = exemplarDbService.getAllExemplars();
+
         //Then
         assertEquals(1, expectedList.size());
         assertEquals(1L, expectedList.get(0).getExemplarId());
@@ -64,72 +66,82 @@ class ExemplarDbServiceTest {
     }
 
     @Test
-    void getExemplar() throws ExemplarNotFoundException {
+    void getExemplarTest() throws ExemplarNotFoundException {
         //Given
         when(exemplarMapperMock.mapToExemplarDto(exemplar)).thenReturn(exemplarDto);
         when(exemplarRepositoryMock.findById(exemplarDto.getExemplarId())).thenReturn(Optional.of(exemplar));
+
         //When
         ExemplarDto expectedExemplarDto = exemplarDbService.getExemplar(1);
+
         //Then
         assertEquals("title", expectedExemplarDto.getTitle().getTitle());
         assertEquals(ExemplarStatus.AVAILABLE, expectedExemplarDto.getStatus());
     }
 
     @Test
-    void getAvailableExemplars() {
+    void getAvailableExemplarsTest() {
         //Given
-        when(exemplarMapperMock.mapToExemplarDtoList(initExemplarList())).thenReturn(initExemplarDtoList());
-        when(exemplarRepositoryMock.findAll()).thenReturn(initExemplarList());
+        when(exemplarMapperMock.mapToExemplarDtoList(exemplarList)).thenReturn(exemplarDtoList);
+        when(exemplarRepositoryMock.findAll()).thenReturn(exemplarList);
+
         //When
         List<ExemplarDto> expectedList = exemplarDbService.getAvailableExemplars();
+
         //Then
         assertEquals(1, expectedList.size());
     }
 
     @Test
-    void getRentedExemplars() {
+    void getRentedExemplarsTest() {
         //Given
-        when(exemplarMapperMock.mapToExemplarDtoList(initExemplarList())).thenReturn(new ArrayList<>());
-        when(exemplarRepositoryMock.findAll()).thenReturn(initExemplarList());
+        when(exemplarMapperMock.mapToExemplarDtoList(exemplarList)).thenReturn(new ArrayList<>());
+        when(exemplarRepositoryMock.findAll()).thenReturn(exemplarList);
+
         //When
         List<ExemplarDto> expectedList = exemplarDbService.getAvailableExemplars();
+
         //Then
         assertTrue(expectedList.isEmpty());
     }
 
     @Test
-    void getLostExemplars() {
+    void getLostExemplarsTest() {
         //Given
-        when(exemplarMapperMock.mapToExemplarDtoList(initExemplarList())).thenReturn(new ArrayList<>());
-        when(exemplarRepositoryMock.findAll()).thenReturn(initExemplarList());
+        when(exemplarMapperMock.mapToExemplarDtoList(exemplarList)).thenReturn(new ArrayList<>());
+        when(exemplarRepositoryMock.findAll()).thenReturn(exemplarList);
+
         //When
         List<ExemplarDto> expectedList = exemplarDbService.getAvailableExemplars();
+
         //Then
         assertTrue(expectedList.isEmpty());
     }
 
     @Test
-    void getDestroyedExemplars() {
+    void getDestroyedExemplarsTest() {
         //Given
-        when(exemplarMapperMock.mapToExemplarDtoList(initExemplarList())).thenReturn(new ArrayList<>());
-        when(exemplarRepositoryMock.findAll()).thenReturn(initExemplarList());
+        when(exemplarMapperMock.mapToExemplarDtoList(exemplarList)).thenReturn(new ArrayList<>());
+        when(exemplarRepositoryMock.findAll()).thenReturn(exemplarList);
+
         //When
         List<ExemplarDto> expectedList = exemplarDbService.getAvailableExemplars();
+
         //Then
         assertTrue(expectedList.isEmpty());
     }
 
     @Test
-    void createExemplar() {
+    void createExemplarTest() {
         //Given
         when(exemplarMapperMock.mapToExemplar(exemplarDto)).thenReturn(exemplar);
-
         Exemplar savedExemplar = exemplarMapperMock.mapToExemplar(exemplarDto);
         when(exemplarRepositoryMock.save(exemplar)).thenReturn(savedExemplar);
-
         when(exemplarMapperMock.mapToExemplarDto(savedExemplar)).thenReturn(exemplarDto);
+
         //When
         ExemplarDto expectedExemplarDto = exemplarDbService.createExemplar(exemplarDto);
+
         //Then
         assertEquals(1L, expectedExemplarDto.getExemplarId());
         assertEquals("title", expectedExemplarDto.getTitle().getTitle());
@@ -138,8 +150,7 @@ class ExemplarDbServiceTest {
     }
 
     @Test
-    void deleteExemplar() {
-        //Given
+    void deleteExemplarTest() {
         //When
         exemplarDbService.deleteExemplar(1L);
         //Then

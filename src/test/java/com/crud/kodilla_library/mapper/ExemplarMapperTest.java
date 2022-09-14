@@ -4,6 +4,7 @@ import com.crud.kodilla_library.domain.Exemplar;
 import com.crud.kodilla_library.domain.ExemplarStatus;
 import com.crud.kodilla_library.domain.Title;
 import com.crud.kodilla_library.domain.dto.ExemplarDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,14 +22,21 @@ class ExemplarMapperTest {
     @InjectMocks
     private ExemplarMapper exemplarMapper;
 
-    public Title initTitle() {
-        return new Title(1L, "title", "author", 2022, new HashSet<>());
+    private Title title;
+    private Exemplar exemplar;
+    private ExemplarDto exemplarDto;
+    List<Exemplar> exemplarList = new ArrayList<>();
+
+    @BeforeEach
+    void init() {
+        title = new Title(1L, "title", "author", 2022, new HashSet<>());
+        exemplar = new Exemplar(1L, title, ExemplarStatus.AVAILABLE, new HashSet<>());
+        exemplarDto = new ExemplarDto(1L, title, ExemplarStatus.AVAILABLE, new HashSet<>());
+        exemplarList.add(exemplar);
     }
 
     @Test
     void mapToExemplarTest() {
-        //Given
-        ExemplarDto exemplarDto = new ExemplarDto(1L, initTitle(), ExemplarStatus.AVAILABLE, new HashSet<>());
         //When
         Exemplar expected = exemplarMapper.mapToExemplar(exemplarDto);
         //Then
@@ -40,8 +48,6 @@ class ExemplarMapperTest {
 
     @Test
     void mapToExemplarDtoTest() {
-        //Given
-        Exemplar exemplar = new Exemplar(1L, initTitle(), ExemplarStatus.AVAILABLE, new HashSet<>());
         //When
         ExemplarDto expected = exemplarMapper.mapToExemplarDto(exemplar);
         //Then
@@ -53,12 +59,8 @@ class ExemplarMapperTest {
 
     @Test
     void mapToExemplarDtoListTest() {
-        //Given
-        Exemplar exemplar = new Exemplar(1L, initTitle(), ExemplarStatus.AVAILABLE, new HashSet<>());
-        List<Exemplar> list = new ArrayList<>();
-        list.add(exemplar);
         //When
-        List<ExemplarDto> expected = exemplarMapper.mapToExemplarDtoList(list);
+        List<ExemplarDto> expected = exemplarMapper.mapToExemplarDtoList(exemplarList);
         //Then
         assertEquals(1, expected.size());
     }

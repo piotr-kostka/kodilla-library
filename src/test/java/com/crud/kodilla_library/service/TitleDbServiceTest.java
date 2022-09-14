@@ -5,6 +5,7 @@ import com.crud.kodilla_library.domain.Title;
 import com.crud.kodilla_library.domain.dto.TitleDto;
 import com.crud.kodilla_library.mapper.TitleMapper;
 import com.crud.kodilla_library.repository.TitleRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,25 +32,24 @@ class TitleDbServiceTest {
     @Mock
     private TitleRepository titleRepositoryMock;
 
-    private final Title title = new Title(1L, "title", "author", 2022, new HashSet<>());
-    private final TitleDto titleDto = new TitleDto(1L, "title", "author", 2022, new HashSet<>());
+    private Title title;
+    private TitleDto titleDto;
+    private List<Title> titleList = new ArrayList<>();
+    private List<TitleDto> titleDtoList = new ArrayList<>();
 
-    private List<Title> initTitleList() {
-        List<Title> titleList = new ArrayList<>();
+    @BeforeEach
+    void init() {
+        title = new Title(1L, "title", "author", 2022, new HashSet<>());
+        titleDto = new TitleDto(1L, "title", "author", 2022, new HashSet<>());
         titleList.add(title);
-        return titleList;
+        titleDtoList.add(titleDto);
     }
 
-    private List<TitleDto> initTitleDtoList() {
-        List<TitleDto> titleDtoList = new ArrayList<>();
-        titleDtoList.add(titleDto);
-        return titleDtoList;
-    }
     @Test
-    void getAllTitles() {
+    void getAllTitlesTest() {
         //Given
-        when(titleMapperMock.mapToTitleDtoList(initTitleList())).thenReturn(initTitleDtoList());
-        when(titleRepositoryMock.findAll()).thenReturn(initTitleList());
+        when(titleMapperMock.mapToTitleDtoList(titleList)).thenReturn(titleDtoList);
+        when(titleRepositoryMock.findAll()).thenReturn(titleList);
 
         //When
         List<TitleDto> expectedList = titleDbService.getAllTitles();
@@ -61,7 +61,7 @@ class TitleDbServiceTest {
     }
 
     @Test
-    void getTitle() throws TitleNotFoundException {
+    void getTitleTest() throws TitleNotFoundException {
         //Given
         when(titleMapperMock.mapToTitleDto(title)).thenReturn(titleDto);
         when(titleRepositoryMock.findById(titleDto.getTitleId())).thenReturn(Optional.of(title));
@@ -75,13 +75,11 @@ class TitleDbServiceTest {
     }
 
     @Test
-    void createTitle() {
+    void createTitleTest() {
         //Given
         when(titleMapperMock.mapToTitle(titleDto)).thenReturn(title);
-
         Title savedTitle = titleMapperMock.mapToTitle(titleDto);
         when(titleRepositoryMock.save(title)).thenReturn(savedTitle);
-
         when(titleMapperMock.mapToTitleDto(savedTitle)).thenReturn(titleDto);
 
         //When
@@ -93,7 +91,7 @@ class TitleDbServiceTest {
     }
 
     @Test
-    void deleteTitle() {
+    void deleteTitleTest() {
         //Given
         //When
         titleDbService.deleteTitle(1L);

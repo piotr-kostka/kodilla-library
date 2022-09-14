@@ -2,6 +2,7 @@ package com.crud.kodilla_library.mapper;
 
 import com.crud.kodilla_library.domain.Title;
 import com.crud.kodilla_library.domain.dto.TitleDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,10 +20,19 @@ class TitleMapperTest {
     @InjectMocks
     private TitleMapper titleMapper;
 
+    private Title title;
+    private TitleDto titleDto;
+    private List<Title> titleList = new ArrayList<>();
+
+    @BeforeEach
+    void init() {
+        title = new Title(1L, "title", "author", 2022, new HashSet<>());
+        titleDto = new TitleDto(1L, "title", "author", 2022, new HashSet<>());
+        titleList.add(title);
+    }
+
     @Test
     void mapToTitleTest() {
-        //Given
-        TitleDto titleDto = new TitleDto(1L, "title", "author", 2022, new HashSet<>());
         //When
         Title expected = titleMapper.mapToTitle(titleDto);
         //Then
@@ -34,8 +44,6 @@ class TitleMapperTest {
 
     @Test
     void mapToTitleDtoTest() {
-        //Given
-        Title title = new Title(1L, "title", "author", 2022, new HashSet<>());
         //When
         TitleDto expected = titleMapper.mapToTitleDto(title);
         //Then
@@ -47,12 +55,8 @@ class TitleMapperTest {
 
     @Test
     void mapToTitleDtoListTest() {
-        //Given
-        Title title = new Title(1L, "title", "author", 2022, new HashSet<>());
-        List<Title> list = new ArrayList<>();
-        list.add(title);
         //When
-        List<TitleDto> expected = titleMapper.mapToTitleDtoList(list);
+        List<TitleDto> expected = titleMapper.mapToTitleDtoList(titleList);
         //Then
         assertEquals(1, expected.size());
     }

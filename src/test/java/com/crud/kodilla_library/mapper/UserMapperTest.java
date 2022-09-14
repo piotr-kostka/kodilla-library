@@ -2,6 +2,7 @@ package com.crud.kodilla_library.mapper;
 
 import com.crud.kodilla_library.domain.User;
 import com.crud.kodilla_library.domain.dto.UserDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,10 +21,19 @@ class UserMapperTest {
     @InjectMocks
     private UserMapper userMapper;
 
+    private User user;
+    private UserDto userDto;
+    private List<User> userList = new ArrayList<>();
+
+    @BeforeEach
+    void init() {
+        userDto = new UserDto(1L, "firstname", "lastname", LocalDate.of(2022,8,14), new HashSet<>());
+        user = new User(1L, "firstname", "lastname", LocalDate.of(2022,8,14), new HashSet<>());
+        userList.add(user);
+    }
+
     @Test
     void mapToUserTest() {
-        //Given
-        UserDto userDto = new UserDto(1L, "firstname", "lastname", LocalDate.of(2022,8,14), new HashSet<>());
         //When
         User expected = userMapper.mapToUser(userDto);
         //Then
@@ -35,8 +45,6 @@ class UserMapperTest {
 
     @Test
     void mapToUserDtoTest() {
-        //Given
-        User user = new User(1L, "firstname", "lastname", LocalDate.of(2022,8,14), new HashSet<>());
         //When
         UserDto expected = userMapper.mapToUserDto(user);
         //Then
@@ -48,12 +56,8 @@ class UserMapperTest {
 
     @Test
     void mapToUserDtoListTest() {
-        //Given
-        User user = new User(1L, "firstname", "lastname", LocalDate.of(2022,8,14), new HashSet<>());
-        List<User> list = new ArrayList<>();
-        list.add(user);
         //When
-        List<UserDto> expected = userMapper.mapToUserDtoList(list);
+        List<UserDto> expected = userMapper.mapToUserDtoList(userList);
         //Then
         assertEquals(1, expected.size());
     }
