@@ -13,19 +13,4 @@ public class GlobalHttpErrorHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
-//
-//    @ExceptionHandler(TitleNotFoundException.class)
-//    public ResponseEntity<Object> handleTitleNotFoundException(TitleNotFoundException titleNotFoundException) {
-//        return new ResponseEntity<>("Title with given ID doesn't exists!", HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler(ExemplarNotFoundException.class)
-//    public ResponseEntity<Object> handleExemplarNotFoundException(ExemplarNotFoundException exemplarNotFoundException) {
-//        return new ResponseEntity<>("Exemplar with given ID doesn't exists", HttpStatus.BAD_REQUEST);
-//    }
-//
-//    @ExceptionHandler(RentalNotFoundException.class)
-//    public ResponseEntity<Object> handleRentalNotFoundException(RentalNotFoundException rentalNotFoundException) {
-//        return new ResponseEntity<>("Rental with given ID doesn't exists", HttpStatus.BAD_REQUEST);
-//    }
 }
