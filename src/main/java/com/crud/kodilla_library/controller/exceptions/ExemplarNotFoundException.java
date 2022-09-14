@@ -1,8 +1,10 @@
 package com.crud.kodilla_library.controller.exceptions;
 
-public class ExemplarNotFoundException extends Exception{
+import com.crud.kodilla_library.domain.Exemplar;
 
-//    public ExemplarNotFoundException(final String message) {
-//        super(message);
-//    }
+public class ExemplarNotFoundException extends EntityNotFoundException{
+
+    public ExemplarNotFoundException(long id) {
+        super(Exemplar.class, id);
+    }
 }

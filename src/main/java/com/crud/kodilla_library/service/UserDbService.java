@@ -24,7 +24,7 @@ public class UserDbService {
     }
 
     public UserDto getUser(final long userId) throws UserNotFoundException {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         return userMapper.mapToUserDto(user);
     }
 

@@ -1,8 +1,10 @@
 package com.crud.kodilla_library.controller.exceptions;
 
-public class TitleNotFoundException extends Exception{
+import com.crud.kodilla_library.domain.Title;
 
-//    public TitleNotFoundException(final String message) {
-//        super(message);
-//    }
+public class TitleNotFoundException extends EntityNotFoundException{
+
+    public TitleNotFoundException(long id) {
+        super(Title.class, id);
+    }
 }

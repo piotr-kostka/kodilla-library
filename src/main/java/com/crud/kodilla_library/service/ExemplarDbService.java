@@ -26,7 +26,7 @@ public class ExemplarDbService {
     }
 
     public ExemplarDto getExemplar(final long exemplarId) throws ExemplarNotFoundException {
-        Exemplar exemplar = exemplarRepository.findById(exemplarId).orElseThrow(ExemplarNotFoundException::new);
+        Exemplar exemplar = exemplarRepository.findById(exemplarId).orElseThrow(() -> new ExemplarNotFoundException(exemplarId));
         return exemplarMapper.mapToExemplarDto(exemplar);
     }
 

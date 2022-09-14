@@ -24,7 +24,7 @@ public class TitleDbService {
     }
 
     public TitleDto getTitle(final long titleId) throws TitleNotFoundException {
-        Title title = titleRepository.findById(titleId).orElseThrow(TitleNotFoundException::new);
+        Title title = titleRepository.findById(titleId).orElseThrow(() -> new TitleNotFoundException(titleId));
         return titleMapper.mapToTitleDto(title);
     }
 

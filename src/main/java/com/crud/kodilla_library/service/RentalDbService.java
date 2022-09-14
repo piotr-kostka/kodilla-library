@@ -29,7 +29,7 @@ public class RentalDbService {
     }
 
     public RentalDto getRental(final long rentalId) throws RentalNotFoundException {
-        Rental rental = rentalRepository.findById(rentalId).orElseThrow(RentalNotFoundException::new);
+        Rental rental = rentalRepository.findById(rentalId).orElseThrow(() -> new RentalNotFoundException(rentalId));
         return rentalMapper.mapToRentalDto(rental);
     }
 

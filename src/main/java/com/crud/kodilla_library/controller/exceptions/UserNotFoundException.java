@@ -1,8 +1,10 @@
 package com.crud.kodilla_library.controller.exceptions;
 
-public class UserNotFoundException extends Exception{
+import com.crud.kodilla_library.domain.User;
 
-//    public UserNotFoundException(final String message) {
-//        super(message);
-//    }
+public class UserNotFoundException extends EntityNotFoundException{
+
+    public UserNotFoundException(long id) {
+        super(User.class, id);
+    }
 }
